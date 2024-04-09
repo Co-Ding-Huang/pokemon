@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -85,32 +84,32 @@ public class PokemonGameMenu {
 	                // Close the current window
 	                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(source);
 	                frame.dispose();
-	                // Open a new window for battle screen
-	                JFrame battleFrame = new JFrame("Battle Screen");
-	                battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-	                // Create main panel
-	                JPanel mainPanel = new JPanel(new BorderLayout());
-
-	                // Create panel for battle screen
-	                JPanel battlePanel = new JPanel();
-	                battlePanel.setBackground(Color.WHITE);
-	                mainPanel.add(battlePanel, BorderLayout.CENTER);
-	                
-	                // Create panel for displaying selected Pokémon
-	                JPanel pokemonPanel = new JPanel(new GridLayout(0, 3));
-	                for (String pokemon : selectedButtons) {
-	                    JLabel pokemonLabel = new JLabel(pokemon);
-	                    pokemonPanel.add(pokemonLabel);
-	                    
-	                }
-	                mainPanel.add(pokemonPanel, BorderLayout.SOUTH);
-
-	                // Add main panel to battle frame
-	                battleFrame.getContentPane().add(mainPanel);
-	                battleFrame.setSize(400, 300); // Set size of battle frame
-	                battleFrame.setVisible(true);
-	            }
+	                startPokemonBattleMode();
 	        }
-	    }
-}
+	    }}
+		private static void startPokemonBattleMode() {
+		    JFrame battleFrame = new JFrame("Pokemon Battle Mode");
+		    battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		    // Create JPanel to hold buttons
+		    JPanel panel = new JPanel(new BorderLayout());
+		    JPanel buttonPanel = new JPanel(new GridLayout(0, 3)); // 2 rows, 3 columns
+		
+		    // Create and add buttons with their respective names
+		    for (String pokemon : selectedButtons) {
+		        JButton button = new JButton(pokemon);
+		        button.addActionListener(new ButtonClickListener());
+		        buttonPanel.add(button);
+		    }
+		
+		    // Add buttonPanel to panel
+		    panel.add(buttonPanel, BorderLayout.CENTER);
+		
+		    // Add panel to frame
+		    battleFrame.getContentPane().add(panel);
+		
+		    // Set frame size, make it visible
+		    battleFrame.setSize(500, 300);
+		    battleFrame.setVisible(true);
+		}
+	}
