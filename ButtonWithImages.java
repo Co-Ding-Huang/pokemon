@@ -88,7 +88,7 @@ public class ButtonWithImages {
 	        }
 	    }}
     private static void startPokemonBattleMode() {
-        JFrame battleFrame = new JFrame("Pokemon Battle Mode");
+        JFrame battleFrame = new JFrame("Select First Pokemon");
         battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create JPanel to hold buttons
