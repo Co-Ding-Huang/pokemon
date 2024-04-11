@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+
 public class ButtonWithImages {
 
     private static ArrayList<String> selectedButtons = new ArrayList<>();
@@ -84,10 +85,10 @@ public class ButtonWithImages {
 	                // Close the current window
 	                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(source);
 	                frame.dispose();
-	                startPokemonBattleMode();
+	                startPokemonSelectMode();
 	        }
 	    }}
-    private static void startPokemonBattleMode() {
+    private static void startPokemonSelectMode() {
         JFrame battleFrame = new JFrame("Select First Pokemon");
         battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -95,7 +96,7 @@ public class ButtonWithImages {
         JPanel panel = new JPanel(new BorderLayout());
         JPanel buttonPanel = new JPanel(new GridLayout(0, 3)); // 2 rows, 3 columns
 
-     // Create and add buttons with their respective names and images
+        // Create and add buttons with their respective names and images
         for (String pokemon : selectedButtons) {
             ImageIcon icon = new ImageIcon(getImagePath(pokemon));
             JButton button = new JButton(pokemon, icon);
@@ -115,22 +116,35 @@ public class ButtonWithImages {
         battleFrame.setSize(500, 300);
         battleFrame.setVisible(true);
     }
-		private static String getImagePath(String pokemonName) {
-		    String[] buttonNames = {"Charizard", "Venusaur", "Blastoise", "Pikachu", "Mewtwo", "Eevee"};
-		    String[] imagePaths = {"src/Pokemon/charizard.png","src/Pokemon/venusaur-f.png","src/Pokemon/blastoise.png","src/Pokemon/pikachu-f.png","src/Pokemon/mewtwo.png","src/Pokemon/eevee.png" };
 
-		    for (int i = 0; i < buttonNames.length; i++) {
-		        if (buttonNames[i].equals(pokemonName)) {
-		            return imagePaths[i];
-		        }
-		    }
-		    return null; // Handle if pokemonName is not found
-		}
-		
-		static class BattleButtonClickListener implements ActionListener {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        // Handle button clicks during battle mode if needed
-		    }
-		}
-	}
+    private static String getImagePath(String pokemonName) {
+        String[] buttonNames = {"Charizard", "Venusaur", "Blastoise", "Pikachu", "Mewtwo", "Eevee"};
+        String[] imagePaths = {"src/Pokemon/charizard.png", "src/Pokemon/venusaur-f.png", "src/Pokemon/blastoise.png", "src/Pokemon/pikachu-f.png", "src/Pokemon/mewtwo.png", "src/Pokemon/eevee.png"};
+
+        for (int i = 0; i < buttonNames.length; i++) {
+            if (buttonNames[i].equals(pokemonName)) {
+                return imagePaths[i];
+            }
+        }
+        return null; // Handle if pokemonName is not found
+    }
+
+    static class BattleButtonClickListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Handle button clicks during battle mode if needed
+            startPokemonBattleMode();
+        }
+    }
+
+    private static void startPokemonBattleMode() {
+        JFrame battleFrame = new JFrame("Pokemon Battle Mode");
+        battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Add components to battleFrame as needed for battle mode
+
+        // Set frame size, make it visible
+        battleFrame.setSize(500, 300);
+        battleFrame.setVisible(true);
+    }
+}
