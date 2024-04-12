@@ -1,21 +1,19 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-//import java.util.HashMap;
+import java.util.HashMap;
 
-public class BattleScreenUI {
-
-    //private static HashMap<String, Integer> pokemonHP = new HashMap<>();
+public class ButtonWithImages {
+    private static HashMap<String, Integer> pokemonHP = new HashMap<>();
     private static ArrayList<String> selectedButtons = new ArrayList<>();
     private static JTextArea textArea;
 
     public static void main(String[] args) {
         // Define the names for each button
         String[] buttonNames = {"Charizard", "Venusaur", "Blastoise", "Pikachu", "Mewtwo", "Eevee"};
-        String[] imagePaths = {"src/Pokemon/charizard.png", "src/Pokemon/venusaur-f.png", "src/Pokemon/blastoise.png", "src/Pokemon/pikachu-f.png", "src/Pokemon/mewtwo.png", "src/Pokemon/eevee.png"};
+        String[] imagePaths = {"C:/Users/andre/Desktop/Pokemon/charizard.png","C:/Users/andre/Desktop/Pokemon/venusaur-f.png","C:/Users/andre/Desktop/Pokemon/blastoise.png","C:/Users/andre/Desktop/Pokemon/pikachu-f.png","C:/Users/andre/Desktop/Pokemon/mewtwo.png","C:/Users/andre/Desktop/Pokemon/eevee.png"};
 
         // Create JFrame
         JFrame frame = new JFrame("Pokemon Game Menu");
@@ -124,7 +122,7 @@ public class BattleScreenUI {
 
     private static String getImagePath(String pokemonName) {
         String[] buttonNames = {"Charizard", "Venusaur", "Blastoise", "Pikachu", "Mewtwo", "Eevee"};
-        String[] imagePaths = {"src/Pokemon/charizard.png", "src/Pokemon/venusaur-f.png", "src/Pokemon/blastoise.png", "src/Pokemon/pikachu-f.png", "src/Pokemon/mewtwo.png", "src/Pokemon/eevee.png"};
+        String[] imagePaths = {"C:/Users/andre/Desktop/Pokemon/charizard.png","C:/Users/andre/Desktop/Pokemon/venusaur-f.png","C:/Users/andre/Desktop/Pokemon/blastoise.png","C:/Users/andre/Desktop/Pokemon/pikachu-f.png","C:/Users/andre/Desktop/Pokemon/mewtwo.png","C:/Users/andre/Desktop/Pokemon/eevee.png"};
 
         for (int i = 0; i < buttonNames.length; i++) {
             if (buttonNames[i].equals(pokemonName)) {
@@ -141,51 +139,19 @@ public class BattleScreenUI {
             String buttonText = source.getText();
 
             if (selectedButtons.contains(buttonText)) {
-                // Pass selected Pokemon name to the battle frame
-                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(source);
+                // Display error message
+            	JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(source);
                 frame.dispose();
-                startPokemonBattleframe(buttonText); // Pass the selected Pokemon name
+                startPokemonBattleframe();
             }
         }
-    }
-
-    private static void startPokemonBattleframe(String selectedPokemon) {
+    
+    private static void startPokemonBattleframe() {
         JFrame battleFrame = new JFrame("Pokemon Battle Mode");
         battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        // Create a JPanel to hold the Pokémon image and empty space
-        JPanel pokemonPanel = new JPanel();
-        pokemonPanel.setLayout(new BoxLayout(pokemonPanel, BoxLayout.Y_AXIS)); // Vertical layout
-        
-        // Add empty space above the Pokémon
-        pokemonPanel.add(Box.createVerticalStrut(300)); // Adjust the space as needed
-
-        // Add selected Pokemon to the battle frame and resize it
-        ImageIcon selectedPokemonIcon = new ImageIcon(getImagePath(selectedPokemon));
-        Image pokemonImage = selectedPokemonIcon.getImage();
-        Image resizedPokemonImage = pokemonImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH); // Adjust the size as needed
-        ImageIcon resizedIcon = new ImageIcon(resizedPokemonImage);
-        JLabel selectedPokemonLabel = new JLabel(resizedIcon, JLabel.CENTER); // Remove the name
-        pokemonPanel.add(selectedPokemonLabel);
-
-        // Add the pokemonPanel to the frame
-        battleFrame.add(pokemonPanel, BorderLayout.WEST);
-
-        // Create JPanel to hold buttons
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 2)); // 2 rows, 2 columns
-
-        // Create and add buttons
-        String[] attackButtons = {"Tackle","Protect","Growl","Bulk Up"};
-        for (int i = 0; i < 4; i++) {
-            JButton moveButton = new JButton(attackButtons[i]);
-            buttonPanel.add(moveButton);
-        }
-
-        // Add buttonPanel to frame
-        battleFrame.add(buttonPanel, BorderLayout.SOUTH);
-        
-        // Size and visibility
-        battleFrame.setSize(900, 600);
+        //Size and visbility
+        battleFrame.setSize(900,600);
         battleFrame.setVisible(true);
     }
-}
+}}
