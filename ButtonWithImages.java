@@ -141,32 +141,41 @@ public class BattleScreenUI {
             String buttonText = source.getText();
 
             if (selectedButtons.contains(buttonText)) {
-                // Display error message
-            	JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(source);
+                // Pass selected Pokemon name to the battle frame
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(source);
                 frame.dispose();
-                startPokemonBattleframe();
+                startPokemonBattleframe(buttonText); // Pass the selected Pokemon name
             }
         }
-    
-        private static void startPokemonBattleframe() {
-            JFrame battleFrame = new JFrame("Pokemon Battle Mode");
-            battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            
-            // Create JPanel to hold buttons
-            JPanel buttonPanel = new JPanel(new GridLayout(2, 2)); // 2 rows, 2 columns
+    }
 
-            // Create and add buttons
-            String[] attackButtons = {"Tackle","Protect","Growl","Bulk Up"};
-            for (int i = 0; i < 4; i++) {
-                JButton moveButton = new JButton(attackButtons[i]);
-                buttonPanel.add(moveButton);
-            }
+    private static void startPokemonBattleframe(String selectedPokemon) {
+        JFrame battleFrame = new JFrame("Pokemon Battle Mode");
+        battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        // Add selected Pokemon to the battle frame and resize it
+        ImageIcon selectedPokemonIcon = new ImageIcon(getImagePath(selectedPokemon));
+        Image pokemonImage = selectedPokemonIcon.getImage();
+        Image resizedPokemonImage = pokemonImage.getScaledInstance(300, 300, Image.SCALE_SMOOTH); // Adjust the size as needed
+        ImageIcon resizedIcon = new ImageIcon(resizedPokemonImage);
+        JLabel selectedPokemonLabel = new JLabel(resizedIcon, JLabel.CENTER); // Remove the name
+        battleFrame.add(selectedPokemonLabel, BorderLayout.WEST);
 
-            // Add buttonPanel to frame
-            battleFrame.add(buttonPanel, BorderLayout.SOUTH);
-            
-            // Size and visibility
-            battleFrame.setSize(900, 600);
-            battleFrame.setVisible(true);
+        // Create JPanel to hold buttons
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 2)); // 2 rows, 2 columns
+
+        // Create and add buttons
+        String[] attackButtons = {"Tackle","Protect","Growl","Bulk Up"};
+        for (int i = 0; i < 4; i++) {
+            JButton moveButton = new JButton(attackButtons[i]);
+            buttonPanel.add(moveButton);
         }
-}}
+
+        // Add buttonPanel to frame
+        battleFrame.add(buttonPanel, BorderLayout.SOUTH);
+        
+        // Size and visibility
+        battleFrame.setSize(900, 600);
+        battleFrame.setVisible(true);
+    }
+}
