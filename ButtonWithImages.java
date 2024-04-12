@@ -153,13 +153,23 @@ public class BattleScreenUI {
         JFrame battleFrame = new JFrame("Pokemon Battle Mode");
         battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
+        // Create a JPanel to hold the Pokémon image and empty space
+        JPanel pokemonPanel = new JPanel();
+        pokemonPanel.setLayout(new BoxLayout(pokemonPanel, BoxLayout.Y_AXIS)); // Vertical layout
+        
+        // Add empty space above the Pokémon
+        pokemonPanel.add(Box.createVerticalStrut(300)); // Adjust the space as needed
+
         // Add selected Pokemon to the battle frame and resize it
         ImageIcon selectedPokemonIcon = new ImageIcon(getImagePath(selectedPokemon));
         Image pokemonImage = selectedPokemonIcon.getImage();
-        Image resizedPokemonImage = pokemonImage.getScaledInstance(300, 300, Image.SCALE_SMOOTH); // Adjust the size as needed
+        Image resizedPokemonImage = pokemonImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH); // Adjust the size as needed
         ImageIcon resizedIcon = new ImageIcon(resizedPokemonImage);
         JLabel selectedPokemonLabel = new JLabel(resizedIcon, JLabel.CENTER); // Remove the name
-        battleFrame.add(selectedPokemonLabel, BorderLayout.WEST);
+        pokemonPanel.add(selectedPokemonLabel);
+
+        // Add the pokemonPanel to the frame
+        battleFrame.add(pokemonPanel, BorderLayout.WEST);
 
         // Create JPanel to hold buttons
         JPanel buttonPanel = new JPanel(new GridLayout(2, 2)); // 2 rows, 2 columns
