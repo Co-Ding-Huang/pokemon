@@ -125,41 +125,87 @@ public class Pokemonopponentsendout{
         firstpickframe.setVisible(true);
     }
 
-    private static String getImagePath(String pokemonName) {
+    public static String getImagePath(String pokemon) {
         String[] buttonNames = {"Charizard", "Venusaur", "Blastoise", "Pikachu", "Mewtwo", "Eevee"};
         String[] imagePaths = {"src/Pokemon/charizard.png", "src/Pokemon/venusaur-f.png", "src/Pokemon/blastoise.png", "src/Pokemon/pikachu-f.png", "src/Pokemon/mewtwo.png", "src/Pokemon/eevee.png"};
 
         for (int i = 0; i < buttonNames.length; i++) {
-            if (buttonNames[i].equals(pokemonName)) {
+            if (buttonNames[i].equals(pokemon)) {
                 return imagePaths[i];
             }
         }
         return null; // Handle if pokemonName is not found
     }
 
-	public static void startPokemonBattleframe() {
-	       JFrame battleFrame = new JFrame("Pokemon Battle Mode");
-	        battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    static void startPokemonBattleframe(String selectedPokemon) {
+        JFrame battleFrame = new JFrame("Pokemon Battle Mode");
+        battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        // Create a JPanel to hold the Pokémon image and empty space
+        JPanel pokemonPanel = new JPanel();
+        pokemonPanel.setLayout(new BoxLayout(pokemonPanel, BoxLayout.Y_AXIS)); // Vertical layout
+        
+        // Add empty space above the Pokémon
+        pokemonPanel.add(Box.createVerticalStrut(300)); // Adjust the space as needed
 
-	        //Size and visibility
-	        battleFrame.setSize(900, 600);
-	        battleFrame.setVisible(true);
+        // Add selected Pokemon to the battle frame and resize it
+        ImageIcon selectedPokemonIcon = new ImageIcon(getImagePath(selectedPokemon));
+        Image pokemonImage = selectedPokemonIcon.getImage();
+        Image resizedPokemonImage = pokemonImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH); // Adjust the size as needed
+        ImageIcon resizedIcon = new ImageIcon(resizedPokemonImage);
+        JLabel selectedPokemonLabel = new JLabel(resizedIcon, JLabel.CENTER); // Remove the name
+        pokemonPanel.add(selectedPokemonLabel);
+
+        // Add the pokemonPanel to the frame
+        battleFrame.add(pokemonPanel, BorderLayout.WEST);
+
+        // Create JPanel to hold buttons
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 2)); // 2 rows, 2 columns
+
+        // Create and add buttons
+        String[] attackButtons = {"Tackle","Protect","Growl","Bulk Up"};
+        for (int i = 0; i < 4; i++) {
+            JButton moveButton = new JButton(attackButtons[i]);
+            buttonPanel.add(moveButton);
+        }
+
+        // Add buttonPanel to frame
+        battleFrame.add(buttonPanel, BorderLayout.SOUTH);
+        
+    
 	        
+	        //Textbox for console
 	        textArea = new JTextArea();
 	        textArea.setEditable(false); // Make it non-editable
 	        textArea.setRows(2);
 	        textArea.setColumns(25); // Set JTextArea to be 2  by 1
 	        battleFrame.add(new JScrollPane(textArea), BorderLayout.EAST);
 
-	        // Randomly select a Pokémon from remainingPokemons
+	     // Randomly select a Pokémon from remainingPokemons
 	        if (!Pokemonopponentsendout.remainingPokemons.isEmpty()) {
 	            Random rand = new Random();
 	            String opponentPokemon = Pokemonopponentsendout.remainingPokemons.get(rand.nextInt(Pokemonopponentsendout.remainingPokemons.size()));
-	            textArea.append("Opponent sends out: " + opponentPokemon);
+	            textArea.append("\nOpponent sends out: " + opponentPokemon);
+
+	            // display the opponent pokemon
+	            ImageIcon opponentIcon = new ImageIcon(getImagePath(opponentPokemon));
+	            Image opponentPokemonIcon = opponentIcon.getImage();
+	            Image resizePokemonIcon = opponentPokemonIcon.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+	            ImageIcon resizedIcon1 = new ImageIcon(resizePokemonIcon);
+	            JLabel opponentPokemonLabe = new JLabel(resizedIcon1, JLabel.CENTER); // Remove the name
+	            pokemonPanel.add(opponentPokemonLabe);
+	            
+	         // Add the pokemonPanel to the frame
+	            battleFrame.add(pokemonPanel, BorderLayout.WEST);
+	            
 	        } else {
-	        	textArea.append("No more Pokémon left for opponent.");
+	            textArea.append("\nNo more Pokémon left for opponent.");
 	        }
-	    }
+	     // Size and visibility
+	        battleFrame.setSize(900, 600);
+	        battleFrame.setVisible(true);
+	        
+    }
 	}
 
 // Moved outside of the Pokemonopens3rdwindow class
@@ -173,7 +219,7 @@ class BattleButtonClickListener implements ActionListener {
             // Display error message
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(source);
             frame.dispose();
-            Pokemonopponentsendout.startPokemonBattleframe();
+            Pokemonopponentsendout.startPokemonBattleframe(buttonText);
         }
     }
 }
