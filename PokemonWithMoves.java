@@ -182,22 +182,28 @@ public class PokemonWithMoves{
 	        battleFrame.add(new JScrollPane(textArea), BorderLayout.EAST);
 
 	     // Randomly select a Pokémon from remainingPokemons
-	        if (!Pokemonopponentsendout.remainingPokemons.isEmpty()) {
+	        if (!PokemonWithMoves.remainingPokemons.isEmpty()) {
 	            Random rand = new Random();
-	            String opponentPokemon = Pokemonopponentsendout.remainingPokemons.get(rand.nextInt(Pokemonopponentsendout.remainingPokemons.size()));
+	            String opponentPokemon = PokemonWithMoves.remainingPokemons.get(rand.nextInt(PokemonWithMoves.remainingPokemons.size()));
 	            textArea.append("\nOpponent sends out: " + opponentPokemon);
 
-	            // display the opponent pokemon
+	            // Create label for opponent's Pokémon
 	            ImageIcon opponentIcon = new ImageIcon(getImagePath(opponentPokemon));
-	            Image opponentPokemonIcon = opponentIcon.getImage();
-	            Image resizePokemonIcon = opponentPokemonIcon.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-	            ImageIcon resizedIcon1 = new ImageIcon(resizePokemonIcon);
-	            JLabel opponentPokemonLabe = new JLabel(resizedIcon1, JLabel.CENTER); // Remove the name
-	            pokemonPanel.add(opponentPokemonLabe);
-	            
-	         // Add the pokemonPanel to the frame
-	            battleFrame.add(pokemonPanel, BorderLayout.WEST);
-	            
+	            Image opponentPokemonImage = opponentIcon.getImage();
+	            Image resizedOpponentPokemonImage = opponentPokemonImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+	            ImageIcon resizedOpponentIcon = new ImageIcon(resizedOpponentPokemonImage);
+	            JLabel opponentPokemonLabel = new JLabel(resizedOpponentIcon, JLabel.CENTER);
+
+	            // Create JPanel to hold opponent's Pokémon
+	            JPanel opponentPanel = new JPanel(new BorderLayout());
+	            opponentPanel.add(opponentPokemonLabel, BorderLayout.CENTER);
+
+	            // Add opponent's Pokémon panel to the battleFrame
+	            battleFrame.add(opponentPanel, BorderLayout.CENTER);
+
+	            // Update the battleFrame to reflect the changes
+	            battleFrame.revalidate();
+	            battleFrame.repaint();
 	        } else {
 	            textArea.append("\nNo more Pokémon left for opponent.");
 	        }
@@ -215,11 +221,11 @@ class BattleButtonClickListener implements ActionListener {
         JButton source = (JButton) e.getSource();
         String buttonText = source.getText();
 
-        if (Pokemonopponentsendout.selectedButtons.contains(buttonText)) {
+        if (PokemonWithMoves.selectedButtons.contains(buttonText)) {
             // Display error message
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(source);
             frame.dispose();
-            Pokemonopponentsendout.startPokemonBattleframe(buttonText);
+            PokemonWithMoves.startPokemonBattleframe(buttonText);
         }
     }
 }
