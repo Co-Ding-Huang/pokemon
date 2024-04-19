@@ -63,6 +63,8 @@ public class PokemonWithMoves{
             JButton source = (JButton) e.getSource();
             String buttonText = source.getText();
 
+            //Setting color
+            source.setBackground(Color.GRAY);
             if (selectedButtons.contains(buttonText)) {
                 if (selectedButtons.size() == 2) {
                     // If this is the second selection, just return without showing an error
@@ -139,81 +141,73 @@ public class PokemonWithMoves{
 
     static void startPokemonBattleframe(String selectedPokemon) {
         JFrame battleFrame = new JFrame("Pokemon Battle Mode");
-        battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        // Create a JPanel to hold the Pokémon image and empty space
-        JPanel pokemonPanel = new JPanel();
-        pokemonPanel.setLayout(new BoxLayout(pokemonPanel, BoxLayout.Y_AXIS)); // Vertical layout
-        
-        // Add empty space above the Pokémon
-        pokemonPanel.add(Box.createVerticalStrut(300)); // Adjust the space as needed
+        battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        // Textbox for console
+        textArea = new JTextArea();
+        textArea.setEditable(false); // Make it non-editable
+        textArea.setRows(2);
+        textArea.setColumns(25); // Set JTextArea to be 2 by 1
+        JScrollPane textbox = new JScrollPane(textArea);
+        textbox.setBounds(600, 0, 300, 600); // Adjusted bounds
 
-        // Add selected Pokemon to the battle frame and resize it
+        // Create a JPanel to hold the background and Pokémon images
+        JPanel mainPanel = new JPanel() {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon backgroundbattle = new ImageIcon("src/Pokemon/Background1.png");
+                Image background = backgroundbattle.getImage();
+                g.drawImage(background, 0, 0, 600, 500, this);
+            }
+        };
+        mainPanel.setLayout(null);
+
+        // Add selected Pokemon to the battle frame
         ImageIcon selectedPokemonIcon = new ImageIcon(getImagePath(selectedPokemon));
-        Image pokemonImage = selectedPokemonIcon.getImage();
-        Image resizedPokemonImage = pokemonImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH); // Adjust the size as needed
-        ImageIcon resizedIcon = new ImageIcon(resizedPokemonImage);
-        JLabel selectedPokemonLabel = new JLabel(resizedIcon, JLabel.CENTER); // Remove the name
-        pokemonPanel.add(selectedPokemonLabel);
+        JLabel selectedPokemonLabel = new JLabel(selectedPokemonIcon);
+        selectedPokemonLabel.setBounds(100, 350, selectedPokemonIcon.getIconWidth(), selectedPokemonIcon.getIconHeight());
+        mainPanel.add(selectedPokemonLabel);
 
-        // Add the pokemonPanel to the frame
-        battleFrame.add(pokemonPanel, BorderLayout.WEST);
+        // Randomly select a Pokémon from remainingPokemons and add it to the panel
+        if (!PokemonWithMoves.remainingPokemons.isEmpty()) {
+            Random rand = new Random();
+            String opponentPokemon = PokemonWithMoves.remainingPokemons.get(rand.nextInt(PokemonWithMoves.remainingPokemons.size()));
+            ImageIcon opponentIcon = new ImageIcon(getImagePath(opponentPokemon));
+            JLabel opponentPokemonLabel = new JLabel(opponentIcon);
+            opponentPokemonLabel.setBounds(400, 150, opponentIcon.getIconWidth(), opponentIcon.getIconHeight());
+            mainPanel.add(opponentPokemonLabel);
+
+            // Add the opponent's selected Pokemon name to the text area
+            textArea.append("\nOpponent selected: " + opponentPokemon);
+        }
 
         // Create JPanel to hold buttons
         JPanel buttonPanel = new JPanel(new GridLayout(2, 2)); // 2 rows, 2 columns
 
         // Create and add buttons
-        String[] attackButtons = {"Tackle","Protect","Growl","Bulk Up"};
+        String[] attackButtons = {"Tackle", "Protect", "Growl", "Bulk Up"};
         for (int i = 0; i < 4; i++) {
             JButton moveButton = new JButton(attackButtons[i]);
             buttonPanel.add(moveButton);
         }
 
-        // Add buttonPanel to frame
-        battleFrame.add(buttonPanel, BorderLayout.SOUTH);
-        
-    
-	        
-	        //Textbox for console
-	        textArea = new JTextArea();
-	        textArea.setEditable(false); // Make it non-editable
-	        textArea.setRows(2);
-	        textArea.setColumns(25); // Set JTextArea to be 2  by 1
-	        battleFrame.add(new JScrollPane(textArea), BorderLayout.EAST);
+        // Add buttonPanel to mainPanel
+        buttonPanel.setBounds(0, 470, 600, 100);
+        mainPanel.add(buttonPanel);
+        mainPanel.add(textbox);
 
-	     // Randomly select a Pokémon from remainingPokemons
-	        if (!PokemonWithMoves.remainingPokemons.isEmpty()) {
-	            Random rand = new Random();
-	            String opponentPokemon = PokemonWithMoves.remainingPokemons.get(rand.nextInt(PokemonWithMoves.remainingPokemons.size()));
-	            textArea.append("\nOpponent sends out: " + opponentPokemon);
+        // Add mainPanel to the frame
+        battleFrame.add(mainPanel);
 
-	            // Create label for opponent's Pokémon
-	            ImageIcon opponentIcon = new ImageIcon(getImagePath(opponentPokemon));
-	            Image opponentPokemonImage = opponentIcon.getImage();
-	            Image resizedOpponentPokemonImage = opponentPokemonImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-	            ImageIcon resizedOpponentIcon = new ImageIcon(resizedOpponentPokemonImage);
-	            JLabel opponentPokemonLabel = new JLabel(resizedOpponentIcon, JLabel.CENTER);
-
-	            // Create JPanel to hold opponent's Pokémon
-	            JPanel opponentPanel = new JPanel(new BorderLayout());
-	            opponentPanel.add(opponentPokemonLabel, BorderLayout.CENTER);
-
-	            // Add opponent's Pokémon panel to the battleFrame
-	            battleFrame.add(opponentPanel, BorderLayout.CENTER);
-
-	            // Update the battleFrame to reflect the changes
-	            battleFrame.revalidate();
-	            battleFrame.repaint();
-	        } else {
-	            textArea.append("\nNo more Pokémon left for opponent.");
-	        }
-	     // Size and visibility
-	        battleFrame.setSize(900, 600);
-	        battleFrame.setVisible(true);
-	        
+        // Size and visibility
+        battleFrame.setSize(900, 600);
+        battleFrame.setVisible(true);
     }
-	}
-
+}
 // Moved outside of the Pokemonopens3rdwindow class
 class BattleButtonClickListener implements ActionListener {
     @Override
