@@ -6,11 +6,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ButtonWithImages {
-    private static HashMap<String, Integer> pokemonHP = new HashMap<>();
+	private static HashMap<String, Integer> pokemonHP = new HashMap<>();
+	private static HashMap<String, Integer> pokemonDEF = new HashMap<>();
+	private static HashMap<String, Integer> pokemonATK = new HashMap<>();
     private static ArrayList<String> selectedButtons = new ArrayList<>();
     private static JTextArea textArea;
 
     public static void main(String[] args) {
+    	
+    	
         // Define the names for each button
         String[] buttonNames = {"Charizard", "Venusaur", "Blastoise", "Pikachu", "Mewtwo", "Eevee"};
         String[] imagePaths = {"C:/Users/andre/Desktop/Pokemon/charizard.png","C:/Users/andre/Desktop/Pokemon/venusaur-f.png","C:/Users/andre/Desktop/Pokemon/blastoise.png","C:/Users/andre/Desktop/Pokemon/pikachu-f.png","C:/Users/andre/Desktop/Pokemon/mewtwo.png","C:/Users/andre/Desktop/Pokemon/eevee.png"};
@@ -153,5 +157,28 @@ public class ButtonWithImages {
         //Size and visbility
         battleFrame.setSize(900,600);
         battleFrame.setVisible(true);
+        
+      //Add hp values
+    	pokemonHP.put("Charizard_hash", 78);
+    	pokemonHP.put("Venusaur_hash", 80);
+    	pokemonHP.put("Blastoise_hash", 79);
+    	pokemonHP.put("Pikachu_hash", 35);
+    	pokemonHP.put("Mewtwo_hash",106 );
+    	pokemonHP.put("Eevee", 55);
+    	
+    	pokemonDEF.put("Charizard_hash",94);
+    	pokemonDEF.put("Venusaur_hash", 92);
+    	pokemonDEF.put("Blastoise_hash",103);
+    	pokemonDEF.put("Pikachu_hash",55);
+    	pokemonDEF.put("Mewtwo_hash",90);
+    	pokemonDEF.put("Eevee",78);
+    	
+    	pokemonATK.put("Charizard_hash",97);
+    	pokemonATK.put("Venusaur_hash",91);
+    	pokemonATK.put("Blastoise_hash",84);
+    	pokemonATK.put("Pikachu_hash",78);
+    	pokemonATK.put("Mewtwo_hash",132);
+    	pokemonATK.put("Eevee",70);
+     }
     }
-}}
+   }
