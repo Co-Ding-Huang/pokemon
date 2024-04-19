@@ -30,21 +30,21 @@ public class basicpokemon{
     	pokemonHP.put("Blastoise_hash", 79);
     	pokemonHP.put("Pikachu_hash", 35);
     	pokemonHP.put("Mewtwo_hash",106 );
-    	pokemonHP.put("Eevee", 55);
+    	pokemonHP.put("Eevee_hash", 55);
     	
     	pokemonDEF.put("Charizard_hash",94);
     	pokemonDEF.put("Venusaur_hash", 92);
     	pokemonDEF.put("Blastoise_hash",103);
     	pokemonDEF.put("Pikachu_hash",55);
     	pokemonDEF.put("Mewtwo_hash",90);
-    	pokemonDEF.put("Eevee",78);
+    	pokemonDEF.put("Eevee_hash",78);
     	
     	pokemonATK.put("Charizard_hash",97);
     	pokemonATK.put("Venusaur_hash",91);
     	pokemonATK.put("Blastoise_hash",84);
     	pokemonATK.put("Pikachu_hash",78);
     	pokemonATK.put("Mewtwo_hash",132);
-    	pokemonATK.put("Eevee",70);
+    	pokemonATK.put("Eevee_hash",70);
     	
         // Create JFrame
         JFrame frame = new JFrame("Pokemon Game Menu");
