@@ -180,6 +180,8 @@ public class pokemonHealthBar {
         playerHealthBar = new JProgressBar(0, pokemonHP.get(selectedPokemon + "_hash"));
         playerHealthBar.setValue(pokemonHP.get(selectedPokemon + "_hash"));
         playerHealthBar.setStringPainted(true);
+        // Set the color of the player's health bar based on its value
+        playerHealthBar.setForeground(getHealthBarColor(playerHealthBar.getValue(), playerHealthBar.getMaximum()));
         playerPanel.add(playerHealthBar, BorderLayout.NORTH);
 
         ImageIcon selectedPokemonIcon = new ImageIcon(getImagePath(selectedPokemon));
@@ -192,12 +194,12 @@ public class pokemonHealthBar {
         // Create a panel to hold the opponent's Pokémon
         JPanel opponentPanel = new JPanel();
         opponentPanel.setLayout(new BorderLayout()); // Border layout
-        opponentPanel.add(Box.createVerticalStrut(100), BorderLayout.NORTH); // Adjust the space as needed
+        opponentPanel.add(Box.createVerticalStrut(10), BorderLayout.NORTH); // Adjust the space as needed
 
         // Randomly select a Pokémon from remainingPokemons
-        if (!pokemonHealthBar.remainingPokemons.isEmpty()) {
+        if (!remainingPokemons.isEmpty()) {
             Random rand = new Random();
-            opponentPokemon = pokemonHealthBar.remainingPokemons.get(rand.nextInt(pokemonHealthBar.remainingPokemons.size())); // Declare opponentPokemon as static
+            opponentPokemon = remainingPokemons.get(rand.nextInt(remainingPokemons.size())); // Declare opponentPokemon as static
             ImageIcon opponentIcon = new ImageIcon(getImagePath(opponentPokemon));
             Image opponentPokemonImage = opponentIcon.getImage();
             Image resizedOpponentPokemonImage = opponentPokemonImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH); // Adjust the size as needed
@@ -209,6 +211,8 @@ public class pokemonHealthBar {
             opponentHealthBar = new JProgressBar(0, pokemonHP.get(opponentPokemon + "_hash"));
             opponentHealthBar.setValue(pokemonHP.get(opponentPokemon + "_hash"));
             opponentHealthBar.setStringPainted(true);
+            // Set the color of the opponent's health bar based on its value
+            opponentHealthBar.setForeground(getHealthBarColor(opponentHealthBar.getValue(), opponentHealthBar.getMaximum()));
             opponentPanel.add(opponentHealthBar, BorderLayout.NORTH);
         } else {
             JLabel noPokemonLabel = new JLabel("No more Pokémon left for opponent.", JLabel.CENTER);
@@ -247,12 +251,23 @@ public class pokemonHealthBar {
                     int newHP = currentHP - damage;
                     pokemonHP.put(opponentPokemon + "_hash", newHP);
                     opponentHealthBar.setValue(newHP);
+                    // Set the color of the opponent's health bar based on its value
+                    opponentHealthBar.setForeground(getHealthBarColor(newHP, opponentHealthBar.getMaximum()));
 
                     // Update textArea
                     textArea.append(selectedPokemon + " used " + attack + ". " + opponentPokemon + " took " + damage + " damage.\n");
                     textArea.append(opponentPokemon + "'s HP: " + newHP + "\n");
 
-                    // close frame on opponent faint
+                    // Check if opponent has fainted
+                    if (newHP <= 0) {
+                        textArea.append(opponentPokemon + " has fainted.\n");
+                        remainingPokemons.remove(opponentPokemon); // Remove the fainted Pokémon from remainingPokemons
+                        opponentPanel.removeAll(); // Remove the fainted Pokémon from the battle panel
+                        opponentPanel.revalidate();
+                        opponentPanel.repaint();
+                    }
+
+                    // Close frame on opponent faint
                     if (newHP <= 0) {
                         battleFrame.dispose();
                     }
@@ -274,6 +289,12 @@ public class pokemonHealthBar {
         // Size and visibility
         battleFrame.setSize(900, 600);
         battleFrame.setVisible(true);
+    }
+
+ // Method to get the color of the health bar based on its value
+    private static Color getHealthBarColor(int currentValue, int maxValue) {
+        float hue = (float) currentValue / maxValue * 0.4f; // Hue ranges from 0.0 to 0.4 (green to red)
+        return Color.getHSBColor(hue, 1.0f, 1.0f);
     }
 
     static class AttackButtonClickListener implements ActionListener {
