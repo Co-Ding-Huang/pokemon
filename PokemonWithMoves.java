@@ -262,7 +262,7 @@ public class PokemonWithMoves {
                         opponentHealthBar.setForeground(getHealthBarColor(newHP, opponentHealthBar.getMaximum()));
 
                         // Update textArea
-                        textArea.append(selectedPokemon + " used " + attack + ". " + opponentPokemon + " took " + damage + " damage.\n");
+                        textArea.append("\n" + selectedPokemon + " used " + attack + ". " + opponentPokemon + " took " + damage + " damage.\n");
                         textArea.append(opponentPokemon + "'s HP: " + newHP + "\n");
 
                         // Close frame on opponent faint
@@ -272,14 +272,15 @@ public class PokemonWithMoves {
                         }
                     } 
                     else if (attack.equals("Growl")) {
-                        // Your existing logic for Growl
+                        textArea.append(  "\n" + selectedPokemon + " used Growl. " + opponentPokemon + "'s attack fell. " + "\n");
                     }
                     else if (attack.equals("Protect")) {
-                        // Your existing logic for Protect
+                    	textArea.append("\n" + selectedPokemon + " used Protect. " + opponentPokemon + "'s move has no effect. " + "\n");
                     }
                     else if (attack.equals("Bulk Up")) {
-                        // Your existing logic for Bulk Up
+                    	textArea.append("\n" + selectedPokemon + " used Bulk Up. " + selectedPokemon + "'s attack increased. " + "\n");
                     }
+                    
                     
                     // After your attack, generate a random attack for the enemy Pokémon
                     String[] enemyAttacks = {"Tackle", "Growl", "Protect", "Bulk Up"};
