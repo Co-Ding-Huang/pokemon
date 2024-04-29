@@ -17,72 +17,60 @@ public class PokemonWithMoves {
     private static String opponentPokemon;
     private static JProgressBar opponentHealthBar;
     private static JProgressBar playerHealthBar;
-    
-   
+    private static boolean protectActive = false;
 
     public static void main(String[] args) {
-        // Define the names for each button
         String[] buttonNames = {"Charizard", "Venusaur", "Blastoise", "Pikachu", "Mewtwo", "Eevee"};
-        String[] imagePaths = {"C:/Users/andre/Desktop/Pokemon/charizard.png","C:/Users/andre/Desktop/Pokemon/venusaur-f.png","C:/Users/andre/Desktop/Pokemon/blastoise.png","C:/Users/andre/Desktop/Pokemon/pikachu-f.png","C:/Users/andre/Desktop/Pokemon/mewtwo.png","C:/Users/andre/Desktop/Pokemon/eevee.png"};
+        String[] imagePaths = {"C:/Users/andre/Desktop/Pokemon/charizard.png", "C:/Users/andre/Desktop/Pokemon/venusaur-f.png", "C:/Users/andre/Desktop/Pokemon/blastoise.png", "C:/Users/andre/Desktop/Pokemon/pikachu-f.png", "C:/Users/andre/Desktop/Pokemon/mewtwo.png", "C:/Users/andre/Desktop/Pokemon/eevee.png"};
 
-        // Add all Pokémon names to the remainingPokemons list
         remainingPokemons.addAll(Arrays.asList(buttonNames));
 
         pokemonHP.put("Charizard_hash", 78);
         pokemonHP.put("Venusaur_hash", 80);
         pokemonHP.put("Blastoise_hash", 79);
         pokemonHP.put("Pikachu_hash", 35);
-        pokemonHP.put("Mewtwo_hash",106 );
+        pokemonHP.put("Mewtwo_hash", 106);
         pokemonHP.put("Eevee_hash", 55);
 
-        pokemonDEF.put("Charizard_hash",94);
+        pokemonDEF.put("Charizard_hash", 94);
         pokemonDEF.put("Venusaur_hash", 92);
-        pokemonDEF.put("Blastoise_hash",103);
-        pokemonDEF.put("Pikachu_hash",55);
-        pokemonDEF.put("Mewtwo_hash",90);
-        pokemonDEF.put("Eevee_hash",78);
+        pokemonDEF.put("Blastoise_hash", 103);
+        pokemonDEF.put("Pikachu_hash", 55);
+        pokemonDEF.put("Mewtwo_hash", 90);
+        pokemonDEF.put("Eevee_hash", 78);
 
-        pokemonATK.put("Charizard_hash",97);
-        pokemonATK.put("Venusaur_hash",91);
-        pokemonATK.put("Blastoise_hash",84);
-        pokemonATK.put("Pikachu_hash",78);
-        pokemonATK.put("Mewtwo_hash",132);
-        pokemonATK.put("Eevee_hash",70);
+        pokemonATK.put("Charizard_hash", 97);
+        pokemonATK.put("Venusaur_hash", 91);
+        pokemonATK.put("Blastoise_hash", 84);
+        pokemonATK.put("Pikachu_hash", 78);
+        pokemonATK.put("Mewtwo_hash", 132);
+        pokemonATK.put("Eevee_hash", 70);
 
-        // Create JFrame
         JFrame frame = new JFrame("Pokemon Game Menu");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Create JPanel to hold buttons
         JPanel mainPanel = new JPanel(new BorderLayout());
-        JPanel buttonPanel = new JPanel(new GridLayout(0, 3)); // 0 rows, 3 columns
+        JPanel buttonPanel = new JPanel(new GridLayout(0, 3));
 
-        //label for the instruction
         JLabel instructionLabel = new JLabel("Select 3 Pokémon", SwingConstants.CENTER);
         mainPanel.add(instructionLabel, BorderLayout.NORTH);
 
-
-        // Create and add buttons with their respective names
         for (int i = 0; i < buttonNames.length; i++) {
             JButton button = new JButton(buttonNames[i], new ImageIcon(imagePaths[i]));
             button.addActionListener(new ButtonClickListener());
             buttonPanel.add(button);
         }
 
-        // Add buttonPanel to panel
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
 
-        //jtext area add
         textArea = new JTextArea();
-        textArea.setEditable(false); // Make it non-editable
+        textArea.setEditable(false);
         textArea.setRows(2);
-        textArea.setColumns(25); // Set JTextArea to be 2  by 1
+        textArea.setColumns(25);
         mainPanel.add(new JScrollPane(textArea), BorderLayout.EAST);
 
-        // Add panel to frame
         frame.getContentPane().add(mainPanel);
 
-        // Set frame size, make it visible
         frame.setSize(900, 600);
         frame.setVisible(true);
     }
@@ -95,21 +83,18 @@ public class PokemonWithMoves {
 
             if (selectedButtons.contains(buttonText)) {
                 if (selectedButtons.size() == 2) {
-                    // If this is the second selection, just return without showing an error
                     selectedButtons.add(buttonText);
                 } else {
-                    // Display error message only if it's not the second selection
                     textArea.append("You've already selected " + buttonText + ".\n");
                 }
                 return;
             }
             if (selectedButtons.size() < 3) {
                 selectedButtons.add(buttonText);
-                remainingPokemons.remove(buttonText); // Remove the selected Pokémon from remainingPokemons
+                remainingPokemons.remove(buttonText);
             }
 
             if (selectedButtons.size() == 3) {
-                // Close the current window
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(source);
                 frame.dispose();
                 startPokemonFirstPick();
@@ -121,245 +106,303 @@ public class PokemonWithMoves {
         JFrame firstpickframe = new JFrame("First Pokemon Menu");
         firstpickframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Create JPanel to hold buttons
         JPanel panel = new JPanel(new BorderLayout());
-        JPanel buttonPanel = new JPanel(new GridLayout(0, 3)); // 2 rows, 3 columns
+        JPanel buttonPanel = new JPanel(new GridLayout(0, 3));
 
         JLabel instructionLabel = new JLabel("Select your first pokemon to send out", SwingConstants.CENTER);
         firstpickframe.add(instructionLabel, BorderLayout.NORTH);
 
-        // Create and add buttons with their respective names and images
         for (String pokemon : selectedButtons) {
             ImageIcon icon = new ImageIcon(getImagePath(pokemon));
             JButton button = new JButton(pokemon, icon);
-            button.setVerticalTextPosition(SwingConstants.BOTTOM); // Text below the icon
-            button.setHorizontalTextPosition(SwingConstants.CENTER); // Center text horizontally
-            button.addActionListener(new BattleButtonClickListener());
+            button.setVerticalTextPosition(SwingConstants.BOTTOM);
+            button.setHorizontalTextPosition(SwingConstants.CENTER);
+            button.addActionListener(new BattleButtonClickListener(pokemon)); // Use BattleButtonClickListener here
             buttonPanel.add(button);
         }
 
-        // Add buttonPanel to panel
         panel.add(buttonPanel, BorderLayout.CENTER);
 
         textArea = new JTextArea();
-        textArea.setEditable(false); // Make it non-editable
+        textArea.setEditable(false);
         textArea.setRows(2);
-        textArea.setColumns(25); // Set JTextArea to be 2  by 1
+        textArea.setColumns(25);
         firstpickframe.add(new JScrollPane(textArea), BorderLayout.EAST);
 
-        // Add panel to frame
         firstpickframe.getContentPane().add(panel);
 
-        // Set frame size, make it visible
         firstpickframe.setSize(900, 600);
         firstpickframe.setVisible(true);
     }
 
     private static String getImagePath(String pokemonName) {
         String[] buttonNames = {"Charizard", "Venusaur", "Blastoise", "Pikachu", "Mewtwo", "Eevee"};
-        String[] imagePaths = {"C:/Users/andre/Desktop/Pokemon/charizard.png","C:/Users/andre/Desktop/Pokemon/venusaur-f.png","C:/Users/andre/Desktop/Pokemon/blastoise.png","C:/Users/andre/Desktop/Pokemon/pikachu-f.png","C:/Users/andre/Desktop/Pokemon/mewtwo.png","C:/Users/andre/Desktop/Pokemon/eevee.png"};
+        String[] imagePaths = {"C:/Users/andre/Desktop/Pokemon/charizard.png", "C:/Users/andre/Desktop/Pokemon/venusaur-f.png", "C:/Users/andre/Desktop/Pokemon/blastoise.png", "C:/Users/andre/Desktop/Pokemon/pikachu-f.png", "C:/Users/andre/Desktop/Pokemon/mewtwo.png", "C:/Users/andre/Desktop/Pokemon/eevee.png"};
         for (int i = 0; i < buttonNames.length; i++) {
             if (buttonNames[i].equals(pokemonName)) {
                 return imagePaths[i];
             }
         }
-        return null; // Handle if pokemonName is not found
+        return null;
     }
 
     static void startPokemonBattleframe(String selectedPokemon) {
+        // Generate the opponent's Pokemon here
+        opponentPokemon = remainingPokemons.get(new Random().nextInt(remainingPokemons.size()));
+
         JFrame battleFrame = new JFrame("Pokemon Battle Mode");
         battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Create a JPanel to hold the Pokémon image and empty space
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-        // Create a panel to hold the player's Pokémon
-        JPanel playerPanel = new JPanel();
-        playerPanel.setLayout(new BorderLayout()); // Border layout
-        playerPanel.add(Box.createVerticalStrut(10), BorderLayout.NORTH); // Adjust the space as needed
+        JPanel playerPanel = new JPanel(new BorderLayout());
+        playerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Create health bar for player
         playerHealthBar = new JProgressBar(0, pokemonHP.get(selectedPokemon + "_hash"));
         playerHealthBar.setValue(pokemonHP.get(selectedPokemon + "_hash"));
         playerHealthBar.setStringPainted(true);
-        // Set the color of the player's health bar based on its value
         playerHealthBar.setForeground(getHealthBarColor(playerHealthBar.getValue(), playerHealthBar.getMaximum()));
         playerPanel.add(playerHealthBar, BorderLayout.NORTH);
 
         ImageIcon selectedPokemonIcon = new ImageIcon(getImagePath(selectedPokemon));
-        Image playerPokemonImage = selectedPokemonIcon.getImage();
-        Image resizedPlayerPokemonImage = playerPokemonImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH); // Adjust the size as needed
-        ImageIcon resizedPlayerIcon = new ImageIcon(resizedPlayerPokemonImage);
-        JLabel selectedPokemonLabel = new JLabel(resizedPlayerIcon, JLabel.CENTER);
-        playerPanel.add(selectedPokemonLabel, BorderLayout.CENTER);
+        JLabel playerPokemonLabel = new JLabel(selectedPokemon, selectedPokemonIcon, SwingConstants.CENTER);
+        playerPokemonLabel.setVerticalAlignment(SwingConstants.BOTTOM); // Align the selected Pokemon to the bottom
+        playerPanel.add(playerPokemonLabel, BorderLayout.CENTER);
 
-        // Create a panel to hold the opponent's Pokémon
-        JPanel opponentPanel = new JPanel();
-        opponentPanel.setLayout(new BorderLayout()); // Border layout
-        opponentPanel.add(Box.createVerticalStrut(10), BorderLayout.NORTH); // Adjust the space as needed
-
-        // Randomly select a Pokémon from remainingPokemons
-        if (!remainingPokemons.isEmpty()) {
-            Random rand = new Random();
-            opponentPokemon = remainingPokemons.get(rand.nextInt(remainingPokemons.size())); // Declare opponentPokemon as static
-            ImageIcon opponentIcon = new ImageIcon(getImagePath(opponentPokemon));
-            Image opponentPokemonImage = opponentIcon.getImage();
-            Image resizedOpponentPokemonImage = opponentPokemonImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH); // Adjust the size as needed
-            ImageIcon resizedOpponentIcon = new ImageIcon(resizedOpponentPokemonImage);
-            JLabel opponentPokemonLabel = new JLabel(resizedOpponentIcon, JLabel.CENTER);
-            opponentPanel.add(opponentPokemonLabel, BorderLayout.CENTER);
-
-            // Create health bar for opponent
-            opponentHealthBar = new JProgressBar(0, pokemonHP.get(opponentPokemon + "_hash"));
-            opponentHealthBar.setValue(pokemonHP.get(opponentPokemon + "_hash"));
-            opponentHealthBar.setStringPainted(true);
-            // Set the color of the opponent's health bar based on its value
-            opponentHealthBar.setForeground(getHealthBarColor(opponentHealthBar.getValue(), opponentHealthBar.getMaximum()));
-            opponentPanel.add(opponentHealthBar, BorderLayout.NORTH);
-        } else {
-            JLabel noPokemonLabel = new JLabel("No more Pokémon left for opponent.", JLabel.CENTER);
-            opponentPanel.add(noPokemonLabel);
-        }
-
-        // Add the player and opponent panels to the main panel
         mainPanel.add(playerPanel, BorderLayout.WEST);
-        mainPanel.add(opponentPanel, BorderLayout.EAST);
 
-        // Add the main panel to the frame
-        battleFrame.getContentPane().add(mainPanel);
+        JPanel opponentPanel = new JPanel(new BorderLayout());
+        opponentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Create JPanel to hold buttons
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 2)); // 2 rows, 2 columns
+        opponentHealthBar = new JProgressBar(0, pokemonHP.get(opponentPokemon + "_hash"));
+        opponentHealthBar.setValue(pokemonHP.get(opponentPokemon + "_hash"));
+        opponentHealthBar.setStringPainted(true);
+        opponentHealthBar.setForeground(getHealthBarColor(opponentHealthBar.getValue(), opponentHealthBar.getMaximum()));
+        opponentPanel.add(opponentHealthBar, BorderLayout.NORTH);
 
-     // Create and add buttons
-        String[] attackButtons = {"Tackle", "Protect", "Growl", "Bulk Up"};
-        for (String attack : attackButtons) {
-            JButton moveButton = new JButton(attack);
-            moveButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (attack.equals("Tackle")) {
-                        // Get selected Pokemon's attack and opponent's defense
-                        int selectedPokemonAttack = pokemonATK.get(selectedPokemon + "_hash");
-                        int opponentDefense = pokemonDEF.get(opponentPokemon + "_hash");
+        ImageIcon opponentPokemonIcon = new ImageIcon(getImagePath(opponentPokemon));
+        JLabel opponentPokemonLabel = new JLabel(opponentPokemon, opponentPokemonIcon, SwingConstants.CENTER);
+        opponentPokemonLabel.setVerticalAlignment(SwingConstants.TOP); // Align the opponent Pokemon to the top
+        opponentPanel.add(opponentPokemonLabel, BorderLayout.CENTER);
 
-                        // Calculate damage
-                        double damageDouble = ((double) selectedPokemonAttack / opponentDefense) * 10;
+        mainPanel.add(opponentPanel, BorderLayout.CENTER);
 
-                        // Apply a modifier for better balancing
-                        damageDouble *= 1.5; // Example: Increase damage by 50%
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 2));
 
-                        // Convert double damage to int
-                        int damage = (int) Math.round(damageDouble);
+        JButton tackleButton = new JButton("Tackle");
+        tackleButton.addActionListener(new AttackButtonClickListener(selectedPokemon, opponentPokemon));
+        buttonPanel.add(tackleButton);
 
-                        // Subtract damage from opponent's HP
-                        int currentHP = pokemonHP.get(opponentPokemon + "_hash");
-                        int newHP = Math.max(0, currentHP - damage); // Ensure HP doesn't go below 0
-                        pokemonHP.put(opponentPokemon + "_hash", newHP);
-                        
-                        opponentHealthBar.setValue(newHP);
-                        // Set the color of the opponent's health bar based on its value
-                        opponentHealthBar.setForeground(getHealthBarColor(newHP, opponentHealthBar.getMaximum()));
+        JButton growlButton = new JButton("Growl");
+        growlButton.addActionListener(new AttackButtonClickListener(selectedPokemon, opponentPokemon));
+        buttonPanel.add(growlButton);
 
-                        // Update textArea
-                        textArea.append("\n" + selectedPokemon + " used " + attack + ". " + opponentPokemon + " took " + damage + " damage.\n");
-                        textArea.append(opponentPokemon + "'s HP: " + newHP + "\n");
+        JButton protectButton = new JButton("Protect");
+        protectButton.addActionListener(new AttackButtonClickListener(selectedPokemon, opponentPokemon));
+        buttonPanel.add(protectButton);
 
-                        // Close frame on opponent faint
-                        if (newHP <= 0) {
-                        	textArea.append("Battle over!!!");
-                            return;
-                        }
-                    } 
-                    else if (attack.equals("Growl")) {
-                        textArea.append(  "\n" + selectedPokemon + " used Growl. " + opponentPokemon + "'s attack fell. " + "\n");
-                    }
-                    else if (attack.equals("Protect")) {
-                    	textArea.append("\n" + selectedPokemon + " used Protect. " + opponentPokemon + "'s move has no effect. " + "\n");
-                    }
-                    else if (attack.equals("Bulk Up")) {
-                    	textArea.append("\n" + selectedPokemon + " used Bulk Up. " + selectedPokemon + "'s attack increased. " + "\n");
-                    }
-                    
-                    
-                    // After your attack, generate a random attack for the enemy Pokémon
-                    String[] enemyAttacks = {"Tackle", "Growl", "Protect", "Bulk Up"};
-                    Random rand = new Random();
-                    String enemyAttack = enemyAttacks[rand.nextInt(enemyAttacks.length)];
-                    
-                    // Perform the enemy's attack
-                    // You can implement the logic for each enemy attack similarly to your own attacks
-                    // For demonstration purposes, let's assume enemy always uses Tackle
-                    int opponentAttackPower = pokemonATK.get(opponentPokemon + "_hash");
-                    int playerDefense = pokemonDEF.get(selectedPokemon + "_hash");
-                    double enemyDamageDouble = ((double) opponentAttackPower / playerDefense) * 10;
-                    // Apply a modifier for better balancing if needed
-                    enemyDamageDouble *= 1.5; // Example: Increase damage by 50%
-                    int enemyDamage = (int) Math.round(enemyDamageDouble);
-                    int playerCurrentHP = pokemonHP.get(selectedPokemon + "_hash");
-                    int playerNewHP = Math.max(0, playerCurrentHP - enemyDamage); // Ensure HP doesn't go below 0
-                    pokemonHP.put(selectedPokemon + "_hash", playerNewHP);
-                    playerHealthBar.setValue(playerNewHP);
-                    playerHealthBar.setForeground(getHealthBarColor(playerNewHP, playerHealthBar.getMaximum()));
-                    textArea.append(opponentPokemon + " used " + enemyAttack + ". " + selectedPokemon + " took " + enemyDamage + " damage.\n");
-                    textArea.append(selectedPokemon + "'s HP: " + playerNewHP + "\n");
+        JButton bulkUpButton = new JButton("Bulk Up");
+        bulkUpButton.addActionListener(new AttackButtonClickListener(selectedPokemon, opponentPokemon));
+        buttonPanel.add(bulkUpButton);
 
-                    
-                    
-                    // Check if player's Pokémon faints
-                    if (playerNewHP <= 0) {
-                    	battleFrame.dispose();
-                        return;
-                    }
-                }
-            });
-            buttonPanel.add(moveButton);
-        }
-        // Add buttonPanel to frame
-        battleFrame.add(buttonPanel, BorderLayout.SOUTH);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // Textbox for console
         textArea = new JTextArea();
-        textArea.setEditable(false); // Make it non-editable
-        textArea.setRows(2);
-        textArea.setColumns(25); // Set JTextArea to be 2 by 1
-        battleFrame.add(new JScrollPane(textArea), BorderLayout.EAST);
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(300, 400)); // Set preferred size for the text area
+        mainPanel.add(scrollPane, BorderLayout.EAST); // Place the scroll pane containing text area on the right
 
-        // Size and visibility
+        battleFrame.getContentPane().add(mainPanel);
         battleFrame.setSize(900, 600);
         battleFrame.setVisible(true);
     }
 
- // Method to get the color of the health bar based on its value
+    private static void tackleMove(String opponentPokemon, String selectedPokemon) {
+        // Get selectedPokemon's attack and opponentPokemon's defense
+        int selectedAttack = pokemonATK.get(selectedPokemon + "_hash");
+        int opponentDefense = pokemonDEF.get(opponentPokemon + "_hash");
+
+        // Calculate damage
+        double damageDouble = ((double) selectedAttack / opponentDefense) * 10;
+
+        // Apply a modifier for better balancing
+        damageDouble *= 1.5; // Example: Increase damage by 50%
+
+        // Convert double damage to int
+        int damage = (int) Math.round(damageDouble);
+
+        // Subtract damage from opponentPokemon's HP
+        int currentHP = pokemonHP.get(opponentPokemon + "_hash");
+        int newHP = Math.max(0, currentHP - damage); // Ensure HP doesn't go below 0
+        pokemonHP.put(opponentPokemon + "_hash", newHP);
+
+        opponentHealthBar.setValue(newHP);
+        // Set the color of the opponentPokemon's health bar based on its value
+        opponentHealthBar.setForeground(getHealthBarColor(newHP, opponentHealthBar.getMaximum()));
+
+        // Update textArea
+        textArea.append("\n" + selectedPokemon + " used Tackle. " + opponentPokemon + " took " + damage + " damage.\n");
+        textArea.append(opponentPokemon + "'s HP: " + newHP + "\n");
+
+        // Close frame on opponentPokemon faint
+        if (newHP <= 0) {
+            textArea.append(opponentPokemon + " has fainted! You win!");
+        }
+    }
+
+    private static void tackleMoveOpponent(String selectedPokemon, String opponentPokemon ) {
+        // Get selectedPokemon's attack and opponentPokemon's defense
+        int opponentAttack = pokemonATK.get(opponentPokemon + "_hash");
+        int selectedDefense = pokemonDEF.get(selectedPokemon + "_hash");
+
+        // Calculate damage
+        double damageDoubleOP = ((double) opponentAttack / selectedDefense) * 10;
+
+        // Apply a modifier for better balancing
+        damageDoubleOP *= 1.5; // Example: Increase damage by 50%
+
+        // Convert double damage to int
+        int damage = (int) Math.round(damageDoubleOP);
+
+        // Subtract damage from opponentPokemon's HP
+        int currentHPOP = pokemonHP.get(selectedPokemon + "_hash");
+        int newHPOP = Math.max(0, currentHPOP - damage); // Ensure HP doesn't go below 0
+        pokemonHP.put(selectedPokemon + "_hash", newHPOP);
+
+        playerHealthBar.setValue(newHPOP);
+        // Set the color of the opponentPokemon's health bar based on its value
+        playerHealthBar.setForeground(getHealthBarColor(newHPOP, playerHealthBar.getMaximum()));
+
+        // Update textArea
+        textArea.append("\n" + opponentPokemon + " used Tackle. " + selectedPokemon + " took " + damage + " damage.\n");
+        textArea.append(selectedPokemon + "'s HP: " + newHPOP + "\n");
+
+        // Close frame on opponentPokemon faint
+        if (newHPOP <= 0) {
+            textArea.append(selectedPokemon + " has fainted! You lose!");
+        }
+    }
+    private static void growlMove(String opponentPokemon, String selectedPokemon) {
+        
+        // Assuming Growl reduces the selectedPokemon's attack by 20%
+        int selectedAttack = pokemonATK.get(opponentPokemon + "_hash");
+        int newAttack = (int) (selectedAttack * 0.8); // Reduce attack by 20%
+        pokemonATK.put(opponentPokemon + "_hash", newAttack);
+
+        textArea.append("\n" + selectedPokemon + " used Growl. " + opponentPokemon + "'s attack fell.\n");
+    }
+    private static void growlMoveOpponent(String selectedPokemon, String opponentPokemon ) {
+        // Reduce the attack of the selectedPokemon
+        // Assuming Growl reduces the selectedPokemon's attack by 20%
+        int selectedAttack = pokemonATK.get(selectedPokemon + "_hash");
+        int newAttack = (int) (selectedAttack * 0.8); // Reduce attack by 20%
+        pokemonATK.put(selectedPokemon + "_hash", newAttack);
+
+        textArea.append("\n" + opponentPokemon + " used Growl. " + selectedPokemon + "'s attack fell.\n");
+    }
+
+    private static void protectMove(String selectedPokemon) {
+        protectActive = true;
+        textArea.append("\n" + selectedPokemon + " used Protect. It took no damage.\n");
+    }
+
+    private static void bulkUpMove(String selectedPokemon) {
+      
+        // Assuming Bulk Up increases the selectedPokemon's defense by 20%
+        int selectedDefense = pokemonDEF.get(selectedPokemon + "_hash");
+        int newDefense = (int) (selectedDefense * 1.2); // Increase defense by 20%
+        pokemonDEF.put(selectedPokemon + "_hash", newDefense);
+
+        textArea.append("\n" + selectedPokemon + " used Bulk Up. " + selectedPokemon + "'s defense increased.\n");
+    }
+    
+    private static void bulkUpMoveOpponent(String opponentPokemon) {
+        // Increase the defense of the opponentPokemon
+        // Assuming Bulk Up increases the opponentPokemon's defense by 20%
+        int opponentDefense = pokemonDEF.get(opponentPokemon + "_hash");
+        int newDefense = (int) (opponentDefense * 1.2); // Increase defense by 20%
+        pokemonDEF.put(opponentPokemon + "_hash", newDefense);
+
+        textArea.append("\n" + opponentPokemon + " used Bulk Up. " + opponentPokemon + "'s defense increased.\n");
+    }
+    private static void opponentTurn(String selectedPokemon) {
+        String[] enemyAttacks = {"Tackle", "Growl", "Bulk Up"};
+        Random rand = new Random();
+        String enemyAttack = enemyAttacks[rand.nextInt(enemyAttacks.length)];
+
+        // Check if Protect is active and if the opponent's move is Tackle
+        if (protectActive && enemyAttack.equals("Tackle")) {
+            textArea.append("\n" + opponentPokemon + "'s Tackle move was blocked by Protect!\n");
+            protectActive = false; // Reset Protect status
+            return; // Skip opponent's turn
+        }
+
+        // Perform the enemy's attack
+        if (enemyAttack.equals("Tackle")) {
+            tackleMoveOpponent(selectedPokemon, opponentPokemon);
+        } else if (enemyAttack.equals("Growl")) {
+            growlMoveOpponent(selectedPokemon, opponentPokemon);
+        } else if (enemyAttack.equals("Bulk Up")) {
+            bulkUpMoveOpponent(opponentPokemon);
+        }
+    }
+
     private static Color getHealthBarColor(int currentValue, int maxValue) {
         float hue = (float) currentValue / maxValue * 0.4f; // Hue ranges from 0.0 to 0.4 (green to red)
         return Color.getHSBColor(hue, 1.0f, 1.0f);
     }
 
     static class AttackButtonClickListener implements ActionListener {
+        private String selectedPokemon;
+        private String opponentPokemon;
+
+        public AttackButtonClickListener(String selectedPokemon, String opponentPokemon) {
+            this.selectedPokemon = selectedPokemon;
+            this.opponentPokemon = opponentPokemon;
+        }
+
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton source = (JButton) e.getSource();
-            String moveName = source.getText();
+            String attack = source.getText();
 
-            // Implement your attack logic here
-            textArea.append("\nYou used " + moveName + "!");
+            if (attack.equals("Tackle")) {
+                tackleMove(opponentPokemon, selectedPokemon);
+            } else if (attack.equals("Growl")) {
+                growlMove(opponentPokemon, selectedPokemon);
+            } else if (attack.equals("Protect")) {
+                protectMove(selectedPokemon);
+            } else if (attack.equals("Bulk Up")) {
+                bulkUpMove(selectedPokemon);
+            }
+
+            // Check if the opponent's HP has reached zero
+            if (pokemonHP.get(opponentPokemon + "_hash") <= 0) {
+                textArea.append("\n");
+            } else {
+                // If the opponent is still alive, proceed with their turn
+                opponentTurn(selectedPokemon);
+            }
         }
     }
-}
 
-// Moved outside of the Pokemonopens3rdwindow class
-class BattleButtonClickListener implements ActionListener {
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JButton source = (JButton) e.getSource();
-        String buttonText = source.getText();
+    static class BattleButtonClickListener implements ActionListener {
+        private String pokemon;
 
-        if (PokemonWithMoves.selectedButtons.contains(buttonText)) {
-            // Display error message
-            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(source);
-            frame.dispose();
-            PokemonWithMoves.startPokemonBattleframe(buttonText);
+        public BattleButtonClickListener(String pokemon) {
+            this.pokemon = pokemon;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Implement the actionPerformed method here
+            // This method will be called when a battle button is clicked
+            JButton button = (JButton) e.getSource();
+            String selectedPokemon = button.getText();
+
+            // Call the method to start the battle with the selected Pokemon
+            startPokemonBattleframe(selectedPokemon);
         }
     }
 }
